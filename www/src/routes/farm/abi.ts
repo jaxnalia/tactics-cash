@@ -29,6 +29,47 @@ export const abi = [
 		],
 		outputs: [],
 	},
+    {
+		inputs: [
+			{
+				name: "owner",
+				type: "address"
+			},
+			{
+				name: "spender",
+				type: "address"
+			}
+		],
+		name: "allowance",
+		outputs: [
+			{
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+    {
+		inputs: [
+			{
+				name: "_pid",
+				type: "uint256"
+			},
+			{
+				name: "_user",
+				type: "address"
+			}
+		],
+		name: "pendingTokens",
+		outputs: [
+			{
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
   ] as const
 
   

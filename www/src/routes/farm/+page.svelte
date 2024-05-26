@@ -17,50 +17,97 @@
 	import { ExternalLink } from 'radix-icons-svelte';
 
 	import { getAccount } from '@wagmi/core'	
-	import { getBalance } from '@wagmi/core'
 	import { getClient } from '@wagmi/core'	//	WEB3
     import { watchAccount } from '@wagmi/core'
 	import { config } from './wagmiConfig'
 	import { approveTokens, depositLP, withdrawLP } from './writeFunctions';
 	import { parseEther } from 'viem';
+	import { formatEther } from 'viem'
+	import { readContract } from '@wagmi/core'
+	import { abi } from './abi'
+    import { onMount } from 'svelte';
+	import GetCotractData from './GetCotractData.svelte';
 
-	let tNuketWplsBAL: number | undefined
     let chainid: number | undefined
 	let isConn: boolean
+	let account: any
+	let allowance0: any = 0
+	let staked0: any = 0
+	let balance0: any = 0
+	let earned0: any = 0
 
 	const accInit = getClient(config)
-	// console.log('Client initialized.', accInit) //DEBUG
 	chainid = accInit.chain.id
+	console.log(accInit)
+	
+	async function getAllowance0(address: any) {
+		const result = await readContract(config, {
+			abi,
+			address: '0x656Bb0ded20F8DEF1053D43947E80a40880316A7',	//	tNUKE-tWPLS (0)
+			functionName: "allowance",
+			args: [
+				address,    //  spender
+				"0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9",   // masterchef
+			]
+		})
+		allowance0 = result
+		return {
+			result
+		}
+	}
 
-    const unwatchAccount = watchAccount(config, {
+	async function getStaked0(address: any) {
+		const result = await readContract(config, {
+			abi,
+			address: '0x656Bb0ded20F8DEF1053D43947E80a40880316A7',	//	tNUKE-tWPLS (0)
+			functionName: "allowance",
+			args: [
+				address,    //  spender
+				"0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9",   // masterchef
+			]
+		})
+		allowance0 = result
+		return {
+			result
+		}
+	}
+
+	async function getEarned0(pid: any, address: any) {
+		const result = await readContract(config, {
+			abi,
+			address: '0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9',	// masterchef
+			functionName: "pendingTokens",
+			args: [
+				pid, 	//	Pool ID
+				address,    //  Client address
+			]
+		})
+		earned0 = formatEther(result)
+		return {
+			result
+		}
+	}
+	
+    watchAccount(config, {
         onChange(accountData) {
-            // console.log('Account changed.', accountData) //DEBUG
-			let acc = getAccount(config)
+			const acc = getAccount(config)
 			isConn = acc.isConnected
             chainid = accountData.chainId
+			account = acc
+			getAllowance0(acc.address)
+			getEarned0(0, acc.address)
+			console.log("earned", earned0)
         }
     })
 
-	let approvedTokensTNUKETWPLS: number
 	$: numberOfTokens = '';
     $: parsedNumberOfTokens = parseEther(numberOfTokens);
   
-    // @ts-ignore
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: any) => {
     numberOfTokens = e.target.value;
     parsedNumberOfTokens = parseEther(numberOfTokens);
-    // console.log(parsedNumberOfTokens);
+    console.log(parsedNumberOfTokens);	//DEBUG
     };
-
-	async function approveTNUKETWPLS() {
-		const result = await approveTokens(
-			"0x656Bb0ded20F8DEF1053D43947E80a40880316A7", //	tNUKE/tWPLS lp
-			"0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9", //	MasterChef
-			0,	//	amount
-			943,	// chainid
-		)
-		console.log(result)
-	}
 
 	async function approveParsedTokens0() {
 		const result = await approveTokens(
@@ -72,7 +119,7 @@
 		console.log(result)
 	}
 
-	async function depositTNUKETWPLS() {
+	async function deposit0() {
 		const result = await depositLP(
 			0, //	Pool ID
 			parsedNumberOfTokens,	//	amount
@@ -80,7 +127,8 @@
 		)
 		console.log(result)
 	}
-	async function withdrawTNUKETWPLS() {
+
+	async function withdraw0() {
 		const result = await withdrawLP(
 			0, //	Pool ID
 			parsedNumberOfTokens,	//	amount
@@ -92,6 +140,9 @@
 <svelte:head>
 	<title>Farm / TACTICS</title>
 </svelte:head>
+
+<GetCotractData />
+
 <div style="background-color: --background;" class='relative flex flex-col items-center backdrop-blur'>
 	<div class="h-10" />
 	<h1 class='font-sans uppercase text-xl sm:text-3xl font-extrabold flex flex-col container leading-none'>
@@ -311,11 +362,10 @@
                                             
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
                                         <p class="text-left ml-16">Stake <strong>tNUKE-tWPLS</strong> earn <strong>tCARE</strong></p>
-                                        <button on:click={approveTNUKETWPLS}>approve</button>
                                             <div class="flex justify-end">
                                                 <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
                                                 <span class="text-xs p-1" style="line-height: 2.2;"><strong>tCARE</strong> earned </span>
-                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button variant="outline" class="p-2">{earned0}</Button>
 												<!-- WITHDRAW FIELD -->
 												<AlertDialog.Root>
 													<AlertDialog.Trigger>
@@ -333,7 +383,7 @@
 														</div>
 													  </div>
 													  <AlertDialog.Footer>
-														<AlertDialog.Action on:click={withdrawTNUKETWPLS}>Confirm</AlertDialog.Action>
+														<AlertDialog.Action on:click={withdraw0}>Confirm</AlertDialog.Action>
 														<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 													  </AlertDialog.Footer>
 													</AlertDialog.Content>
@@ -357,10 +407,10 @@
 													  </div>
 													<AlertDialog.Footer>
 														{#key parsedNumberOfTokens}
-															{#if parsedNumberOfTokens > approvedTokensTNUKETWPLS}
+															{#if parsedNumberOfTokens > allowance0}
 																<Button on:click={approveParsedTokens0}>Approve</Button>
 															{:else}
-																<AlertDialog.Action on:click={depositTNUKETWPLS}>Confirm</AlertDialog.Action>
+																<AlertDialog.Action on:click={deposit0}>Confirm</AlertDialog.Action>
 															{/if}
 														{/key}
 														<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
