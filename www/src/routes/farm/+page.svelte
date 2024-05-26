@@ -14,25 +14,38 @@
 	import { ExternalLink } from 'radix-icons-svelte';
 
 	import { getAccount } from '@wagmi/core'	
+	import { getBalance } from '@wagmi/core'
 	import { getClient } from '@wagmi/core'	//	WEB3
     import { watchAccount } from '@wagmi/core'
-	import { config } from './configWatch'
+	import { config } from './wagmiConfig'
+	import { approveTokens } from './writeFunctions';
 
+	let tNuketWplsBAL: number | undefined
     let chainid: number | undefined
 	let isConn: boolean
 
 	const accInit = getClient(config)
-	console.log('Client initialized.', accInit)
+	// console.log('Client initialized.', accInit) //DEBUG
 	chainid = accInit.chain.id
 
     const unwatchAccount = watchAccount(config, {
         onChange(accountData) {
-            console.log('Account changed.', accountData)
+            // console.log('Account changed.', accountData) //DEBUG
 			let acc = getAccount(config)
 			isConn = acc.isConnected
             chainid = accountData.chainId
         }
     })
+
+	async function approveTNUKETWPLS() {
+		const result = await approveTokens(
+			"0x656Bb0ded20F8DEF1053D43947E80a40880316A7", //	tNUKE/tWPLS lp
+			"0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9", //	MasterChef
+			0,	//	amount
+			943,	// chainid
+		)
+		console.log(result)
+	}
 
 </script>
 <svelte:head>
@@ -81,28 +94,49 @@
 		</Tabs.Content>
 		<Tabs.Content value="farm"> 
 			<Card.Root class="backdrop-blur w-96 sm:w-128 md:w-180">
-				<Card.Header class="p-5">
-					<h1 class="text-3xl font-bold">Liquidity Farm</h1>
-					<Card.Title>Stake PulseX V2 liquidity & earn <span class="font-bold">CARE</span></Card.Title>
 
-					<div style="margin-top: -2.375rem;" class="hidden sm:flex justify-end">
-						<Tooltip.Root>
+				{#key chainid || isConn}
+
+					<Card.Header class="p-5">
+						<h1 class="text-3xl font-bold">Liquidity Farm</h1>
+						{#if chainid == 943}
+							<Card.Title>Stake Testnet PulseX V1 liquidity & earn <span class="font-bold">tCARE</span></Card.Title>
+						{:else}
+							<Card.Title>Stake PulseX V2 liquidity & earn <span class="font-bold">CARE</span></Card.Title>
+						{/if}
 						
-							<Tooltip.Trigger>
-								<span class="font-semibold" style=""><span class="font-bold">CARE</span> per block: 0</span>
-							</Tooltip.Trigger>
-							<Tooltip.Content>
-								0 CARE per day
-							</Tooltip.Content>
-							
-						</Tooltip.Root>
-					</div>
-					
 
+						<div style="margin-top: -2.375rem;" class="hidden sm:flex justify-end">
+							<Tooltip.Root>
+								{#if chainid == 943}
+									<Tooltip.Trigger>
+										<span class="font-semibold" style=""><span class="font-bold">tCARE</span> per block: --</span>
+									</Tooltip.Trigger>
+									<Tooltip.Content>
+										-- tCARE per day
+									</Tooltip.Content>
+								{:else if chainid == 369}
+									<Tooltip.Trigger>
+										<span class="font-semibold" style=""><span class="font-bold">CARE</span> per block: --</span>
+									</Tooltip.Trigger>
+									<Tooltip.Content>
+										-- CARE per day
+									</Tooltip.Content>
+								{:else}
+									<Tooltip.Trigger>
+										<span class="font-semibold" style=""><span class="font-bold">CARE</span> per block: --</span>
+									</Tooltip.Trigger>
+									<Tooltip.Content>
+										-- CARE per day
+									</Tooltip.Content>
+								{/if}
+							</Tooltip.Root>
+						</div>
+						
+					</Card.Header>
+				
+					<Card.Content class="p-5 py-0 text-center">
 					
-				</Card.Header>
-				<Card.Content class="p-5 py-0 text-center">
-					{#key chainid || isConn}
 						{#if isConn || accInit.chain.id >= 1}	
                             {#if chainid == 369}
                                 <p>Connected to PulseChain Mainnet farm.</p>
@@ -223,6 +257,30 @@
                                 </div>
                             {:else if chainid == 943}
                                 <p>Connected to PulseChain Testnet farm.</p>
+
+								<div class="flex justify-between mb-2">
+                                    <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+            
+                                        <div style="transform: translate(0, 8px)">
+                                            
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={pls} alt="PLS" width="20">
+                                        </div>
+                                            
+                                            
+                                        <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+                                        <p class="text-left ml-16">Stake <strong>tNUKE-tWPLS</strong> earn <strong>tCARE</strong></p>
+                                        <button on:click={approveTNUKETWPLS}>approve</button>
+                                            <div class="flex justify-end">
+                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+                                                <span class="text-xs p-1" style="line-height: 2.2;"><strong>tCARE</strong> earned </span>
+                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button class="p-1 ml-1"><Minus /></Button>
+                                                <Button class="p-1 ml-1"><Plus /></Button>
+                                            </div>
+                                    </div>
+                                </div>
+
                             {:else}
                                 <p class="text-yellow-500 font-bold text-md mt-2 mb-2">Wrong network. Switch to PulseChain.</p>
                             {/if}
@@ -234,9 +292,9 @@
 						
 					
                         {/if}	
-                    {/key}
-				</Card.Content>
-
+                    
+					</Card.Content>
+				{/key}
 				<div style="justify-content: space-around;" class="px-6 py-2 flex flex-row">
 					<span style="text-decoration: underline;" class="flex flex pb-3">
 						<div></div>
