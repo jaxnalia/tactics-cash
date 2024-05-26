@@ -42,11 +42,16 @@ const modal = createWeb3Modal({
     943: 'https://bigjax.s3.eu-west-2.amazonaws.com/tPLS.png',
     1: 'https://seeklogo.com/images/E/ethereum-logo-EC6CDBA45B-seeklogo.com.png'
     },
+    themeVariables: {
+    '--w3m-color-mix': '#facc14',
+    '--w3m-color-mix-strength': 0,
+      '--w3m-accent': '#facc14'
+    },
     allowUnsupportedChain: false
 })
 </script>
 
 <w3m-network-button />
-<w3m-button />
+<w3m-button size="md" />
 
 
