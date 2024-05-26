@@ -1,11 +1,10 @@
 <script>
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi'
-
 import { pulsechain, pulsechainV4 } from '@wagmi/core/chains'
 import { reconnect } from '@wagmi/core'
 
 // 1. Get a project ID at https://cloud.walletconnect.com
-const projectId = '9a687a450c1fb28fa870b3feaa8f935d'
+const projectId = '0381a469bdba33979c1c3ba80c123dea'
 
 // 2. Create wagmiConfig
 const metadata = {

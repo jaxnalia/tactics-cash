@@ -2,7 +2,10 @@
 	import * as Tabs from '$lib/components/ui/tabs'; //	UI
 	import * as Card from '$lib/components/ui/card';
 	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
-	import { Button } from '$lib/components/ui/button';
+	import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+	import * as AlertDialog from "$lib/components/ui/alert-dialog";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { Label } from "$lib/components/ui/label/index.js";
 
 	import pls from "$lib/images/pls.png";	// IMAGES
 	import plsx from "$lib/images/plsx.png";
@@ -18,7 +21,8 @@
 	import { getClient } from '@wagmi/core'	//	WEB3
     import { watchAccount } from '@wagmi/core'
 	import { config } from './wagmiConfig'
-	import { approveTokens } from './writeFunctions';
+	import { approveTokens, depositLP, withdrawLP } from './writeFunctions';
+	import { parseEther } from 'viem';
 
 	let tNuketWplsBAL: number | undefined
     let chainid: number | undefined
@@ -37,6 +41,17 @@
         }
     })
 
+	let approvedTokensTNUKETWPLS: number
+	$: numberOfTokens = '';
+    $: parsedNumberOfTokens = parseEther(numberOfTokens);
+  
+    // @ts-ignore
+    const handleInputChange = (e) => {
+    numberOfTokens = e.target.value;
+    parsedNumberOfTokens = parseEther(numberOfTokens);
+    // console.log(parsedNumberOfTokens);
+    };
+
 	async function approveTNUKETWPLS() {
 		const result = await approveTokens(
 			"0x656Bb0ded20F8DEF1053D43947E80a40880316A7", //	tNUKE/tWPLS lp
@@ -47,6 +62,32 @@
 		console.log(result)
 	}
 
+	async function approveParsedTokens0() {
+		const result = await approveTokens(
+			"0x656Bb0ded20F8DEF1053D43947E80a40880316A7", //	tNUKE/tWPLS lp
+			"0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9", //	MasterChef
+			parsedNumberOfTokens,	//	amount
+			943,	// chainid
+		)
+		console.log(result)
+	}
+
+	async function depositTNUKETWPLS() {
+		const result = await depositLP(
+			0, //	Pool ID
+			parsedNumberOfTokens,	//	amount
+			943,	// chainid
+		)
+		console.log(result)
+	}
+	async function withdrawTNUKETWPLS() {
+		const result = await withdrawLP(
+			0, //	Pool ID
+			parsedNumberOfTokens,	//	amount
+			943,	// chainid
+		)
+		console.log(result)
+	}
 </script>
 <svelte:head>
 	<title>Farm / TACTICS</title>
@@ -275,8 +316,57 @@
                                                 <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
                                                 <span class="text-xs p-1" style="line-height: 2.2;"><strong>tCARE</strong> earned </span>
                                                 <Button variant="outline" class="p-2">0</Button>
-                                                <Button class="p-1 ml-1"><Minus /></Button>
-                                                <Button class="p-1 ml-1"><Plus /></Button>
+												<!-- WITHDRAW FIELD -->
+												<AlertDialog.Root>
+													<AlertDialog.Trigger>
+														<Button class="p-1 ml-1"><Minus /></Button>
+													</AlertDialog.Trigger>
+													<AlertDialog.Content class="sm:max-w-[425px]">
+													  <AlertDialog.Header>
+														<AlertDialog.Title>Withdraw tNUKE-tWPLS</AlertDialog.Title>
+													  </AlertDialog.Header>
+													  <div class="grid gap-4 py-4">
+														<div class="grid grid-cols-4 items-center gap-4">
+														  <Label for="amount" class="text-right">Amount</Label>
+														  <Label for="amount" class="absolute right-0 mr-10 hover:underline">Max</Label>
+														  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
+														</div>
+													  </div>
+													  <AlertDialog.Footer>
+														<AlertDialog.Action on:click={withdrawTNUKETWPLS}>Confirm</AlertDialog.Action>
+														<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+													  </AlertDialog.Footer>
+													</AlertDialog.Content>
+												  </AlertDialog.Root>
+                                                <!-- DEPOSIT FIELD -->
+												<AlertDialog.Root>
+													<AlertDialog.Trigger>
+														<Button class="p-1 ml-1"><Plus /></Button>
+													</AlertDialog.Trigger>
+													<AlertDialog.Content class="sm:max-w-[425px]">
+													  <AlertDialog.Header>
+														<AlertDialog.Title>Deposit tNUKE-tWPLS</AlertDialog.Title>
+													  </AlertDialog.Header>
+													  <div class="grid gap-4 py-4">
+														<div class="grid grid-cols-4 items-center gap-4">
+														  <Label for="amount" class="text-right">Amount</Label>
+														  <Label for="amount" class="absolute right-0 mr-10 hover:underline">Max</Label>
+														  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
+														  
+														</div>
+													  </div>
+													<AlertDialog.Footer>
+														{#key parsedNumberOfTokens}
+															{#if parsedNumberOfTokens > approvedTokensTNUKETWPLS}
+																<Button on:click={approveParsedTokens0}>Approve</Button>
+															{:else}
+																<AlertDialog.Action on:click={depositTNUKETWPLS}>Confirm</AlertDialog.Action>
+															{/if}
+														{/key}
+														<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+													</AlertDialog.Footer>
+													</AlertDialog.Content>
+												  </AlertDialog.Root>
                                             </div>
                                     </div>
                                 </div>
