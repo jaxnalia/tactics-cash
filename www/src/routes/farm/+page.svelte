@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Tabs from '$lib/components/ui/tabs'; //	Shadcn
+	import * as Tabs from '$lib/components/ui/tabs'; //	UI
 	import * as Card from '$lib/components/ui/card';
 	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 	import { Button } from '$lib/components/ui/button';
@@ -13,10 +13,8 @@
     import { Plus, Minus } from "lucide-svelte"; // ICONS
 	import { ExternalLink } from 'radix-icons-svelte';
 
-	// import { getWalletClient } from '@wagmi/core'
-
 	import { getAccount } from '@wagmi/core'	
-	import { getClient } from '@wagmi/core'	//	Web3
+	import { getClient } from '@wagmi/core'	//	WEB3
     import { watchAccount } from '@wagmi/core'
 	import { config } from './configWatch'
 
@@ -104,132 +102,130 @@
 					
 				</Card.Header>
 				<Card.Content class="p-5 py-0 text-center">
-					{#key chainid}
+					{#key chainid || isConn}
 						{#if isConn || accInit.chain.id >= 1}	
-						<!-- {#if isConn} -->
-						
-						{#if chainid == 369}
-							<p>Connected to PulseChain Mainnet farm.</p>
+                            {#if chainid == 369}
+                                <p>Connected to PulseChain Mainnet farm.</p>
 
-							<div class="flex justify-between mb-2">
-								<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
-		
-									<div style="transform: translate(0, 8px)">
-										
-										<img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
-										<img style="position: absolute; transform: translate(0px, 0px);" src={plsx} alt="PLSX" width="20">
-									</div>
-										
-										
-									<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-									<p class="text-left ml-16">Stake <strong>NUKE-PLSX</strong> earn <strong>CARE</strong></p>
-									
-										<div class="flex justify-end">
-											<span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
-											<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
-											<Button variant="outline" class="p-2">0</Button>
-											<Button class="p-1 ml-1"><Minus /></Button>
-											<Button class="p-1 ml-1"><Plus /></Button>
-										</div>
-								</div>
-							</div>
-		
-							<div class="flex justify-between mb-2">
-								<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
-		
-									<div style="transform: translate(0, 8px)">
-										
-										<img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
-										<img style="position: absolute; transform: translate(0px, 0px);" src={inc} alt="INC" width="20">
-									</div>
-										
-										
-									<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-									<p class="text-left ml-16">Stake <strong>NUKE-INC</strong> earn <strong>CARE</strong></p>
-									
-										<div class="flex justify-end">
-											<span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
-											<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
-											<Button variant="outline" class="p-2">0</Button>
-											<Button class="p-1 ml-1"><Minus /></Button>
-											<Button class="p-1 ml-1"><Plus /></Button>
-										</div>
-									
-								</div>
-								
-							</div>
-		
-							<div class="flex justify-between mb-2">
-								<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
-		
-									<div style="transform: translate(0, 8px)">
-										
-										<img style="position: absolute; transform: translate(0px, 0px);" src={care} alt="CARE" width="48">
-										<img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="20">
-									</div>
-		
-										<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-										<p class="text-left ml-16">Stake <strong>CARE-NUKE</strong> earn <strong>CARE</strong></p>
-									
-										<div class="flex justify-end">
-											<span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
-											<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
-											<Button variant="outline" class="p-2">0</Button>
-											<Button class="p-1 ml-1"><Minus /></Button>
-											<Button class="p-1 ml-1"><Plus /></Button>
-										</div>
-								</div>
-								
-							</div>
-		
-							<div class="flex justify-between mb-2">
-								<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
-		
-									<div style="transform: translate(0, 8px)">
-										
-										<img style="position: absolute; transform: translate(0px, 0px);" src={care} alt="CARE" width="48">
-										<img style="position: absolute; transform: translate(0px, 0px);" src={plsx} alt="PLSX" width="20">
-									</div>
-		
-										<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-										<p class="text-left ml-16">Stake <strong>CARE-PLSX</strong> earn <strong>CARE</strong></p>
-									
-										<div class="flex justify-end">
-											<span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
-											<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
-											<Button variant="outline" class="p-2">0</Button>
-											<Button class="p-1 ml-1"><Minus /></Button>
-											<Button class="p-1 ml-1"><Plus /></Button>
-										</div>
-								</div>
-							</div>
-		
-							<div class="flex justify-between mb-2">
-								<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
-		
-									<div style="transform: translate(0, 8px)">
-										
-										<img style="position: absolute; transform: translate(0px, 0px);" src={care} alt="CARE" width="48">
-										<img style="position: absolute; transform: translate(0px, 0px);" src={inc} alt="INC" width="20">
-									</div>
-		
-										<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-										<p class="text-left ml-16">Stake <strong>CARE-INC</strong> earn <strong>CARE</strong></p>
-									
-										<div class="flex justify-end">
-											<span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
-											<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
-											<Button variant="outline" class="p-2">0</Button>
-											<Button class="p-1 ml-1"><Minus /></Button>
-											<Button class="p-1 ml-1"><Plus /></Button>
-										</div>
-								</div>
-							</div>
-						{:else if chainid == 943}
-							<p>Connected to PulseChain Testnet farm.</p>
-						{:else}
-							<p class="text-yellow-500 font-bold text-md mt-2 mb-2">Wrong network. Switch to PulseChain.</p>
-						{/if}
+                                <div class="flex justify-between mb-2">
+                                    <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+            
+                                        <div style="transform: translate(0, 8px)">
+                                            
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={plsx} alt="PLSX" width="20">
+                                        </div>
+                                            
+                                            
+                                        <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+                                        <p class="text-left ml-16">Stake <strong>NUKE-PLSX</strong> earn <strong>CARE</strong></p>
+                                        
+                                            <div class="flex justify-end">
+                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+                                                <span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button class="p-1 ml-1"><Minus /></Button>
+                                                <Button class="p-1 ml-1"><Plus /></Button>
+                                            </div>
+                                    </div>
+                                </div>
+            
+                                <div class="flex justify-between mb-2">
+                                    <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+            
+                                        <div style="transform: translate(0, 8px)">
+                                            
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={inc} alt="INC" width="20">
+                                        </div>
+                                            
+                                            
+                                        <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+                                        <p class="text-left ml-16">Stake <strong>NUKE-INC</strong> earn <strong>CARE</strong></p>
+                                        
+                                            <div class="flex justify-end">
+                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+                                                <span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button class="p-1 ml-1"><Minus /></Button>
+                                                <Button class="p-1 ml-1"><Plus /></Button>
+                                            </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+            
+                                <div class="flex justify-between mb-2">
+                                    <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+            
+                                        <div style="transform: translate(0, 8px)">
+                                            
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={care} alt="CARE" width="48">
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="20">
+                                        </div>
+            
+                                            <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+                                            <p class="text-left ml-16">Stake <strong>CARE-NUKE</strong> earn <strong>CARE</strong></p>
+                                        
+                                            <div class="flex justify-end">
+                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+                                                <span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button class="p-1 ml-1"><Minus /></Button>
+                                                <Button class="p-1 ml-1"><Plus /></Button>
+                                            </div>
+                                    </div>
+                                    
+                                </div>
+            
+                                <div class="flex justify-between mb-2">
+                                    <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+            
+                                        <div style="transform: translate(0, 8px)">
+                                            
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={care} alt="CARE" width="48">
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={plsx} alt="PLSX" width="20">
+                                        </div>
+            
+                                            <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+                                            <p class="text-left ml-16">Stake <strong>CARE-PLSX</strong> earn <strong>CARE</strong></p>
+                                        
+                                            <div class="flex justify-end">
+                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+                                                <span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button class="p-1 ml-1"><Minus /></Button>
+                                                <Button class="p-1 ml-1"><Plus /></Button>
+                                            </div>
+                                    </div>
+                                </div>
+            
+                                <div class="flex justify-between mb-2">
+                                    <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+            
+                                        <div style="transform: translate(0, 8px)">
+                                            
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={care} alt="CARE" width="48">
+                                            <img style="position: absolute; transform: translate(0px, 0px);" src={inc} alt="INC" width="20">
+                                        </div>
+            
+                                            <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+                                            <p class="text-left ml-16">Stake <strong>CARE-INC</strong> earn <strong>CARE</strong></p>
+                                        
+                                            <div class="flex justify-end">
+                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+                                                <span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+                                                <Button variant="outline" class="p-2">0</Button>
+                                                <Button class="p-1 ml-1"><Minus /></Button>
+                                                <Button class="p-1 ml-1"><Plus /></Button>
+                                            </div>
+                                    </div>
+                                </div>
+                            {:else if chainid == 943}
+                                <p>Connected to PulseChain Testnet farm.</p>
+                            {:else}
+                                <p class="text-yellow-500 font-bold text-md mt-2 mb-2">Wrong network. Switch to PulseChain.</p>
+                            {/if}
 						{:else}
 							<div class="flex justify-center">
 								<w3m-button class="text-black" size="md" label="Connect Wallet" balance="hide"/>
@@ -237,8 +233,8 @@
 							<p class="text-gray-500 text-sm mt-2 mb-2">Farms not showing? Click <a class="underline" href="/" data-sveltekit-reload>here</a> to reload.</p>
 						
 					
-					{/if}	
-					{/key}
+                        {/if}	
+                    {/key}
 				</Card.Content>
 
 				<div style="justify-content: space-around;" class="px-6 py-2 flex flex-row">
