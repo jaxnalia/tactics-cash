@@ -6,7 +6,7 @@
 	const link = {
 		tele: 'https://t.me/TacticsPLS',
 		xapp: 'https://x.com/TacticsPLS',
-		git: 'https://github.com/jaxnalia/tactics-cash-master'
+		git: 'https://github.com/jaxnalia/tactics-cash'
 	};
 	import { Github, Send, Twitter } from "lucide-svelte";
 </script>
