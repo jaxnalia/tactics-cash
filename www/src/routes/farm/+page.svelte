@@ -136,6 +136,11 @@
 		)
 		console.log(result)
 	}
+
+	onMount(async () => {
+		getEarned0(0, account.address)
+		getAllowance0(account.address)
+	})
 </script>
 <svelte:head>
 	<title>Farm / TACTICS</title>
@@ -202,10 +207,10 @@
 							<Tooltip.Root>
 								{#if chainid == 943}
 									<Tooltip.Trigger>
-										<span class="font-semibold" style=""><span class="font-bold">tCARE</span> per block: --</span>
+										<span class="font-semibold" style=""><span class="font-bold">tCARE</span> per block: 10</span>
 									</Tooltip.Trigger>
 									<Tooltip.Content>
-										-- tCARE per day
+										86400 tCARE per day
 									</Tooltip.Content>
 								{:else if chainid == 369}
 									<Tooltip.Trigger>
