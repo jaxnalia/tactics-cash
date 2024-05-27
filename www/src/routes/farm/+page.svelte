@@ -27,6 +27,7 @@
 	import { abi } from './abi'
     import { onMount } from 'svelte';
 	import GetCotractData from './GetCotractData.svelte';
+	import { watchClient } from '@wagmi/core'
 
     let chainid: number | undefined
 	let isConn: boolean
@@ -97,6 +98,12 @@
 			getAllowance0(acc.address)
 			getEarned0(0, acc.address)
 			console.log("earned", earned0)
+        }
+    })
+
+	watchClient(config, {
+        onChange(clientData) {
+			console.log(clientData)
         }
     })
 
