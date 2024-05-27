@@ -18,6 +18,7 @@
 
 	import { getAccount } from '@wagmi/core'	
 	import { getClient } from '@wagmi/core'	//	WEB3
+	import { getBalance } from '@wagmi/core'
     import { watchAccount } from '@wagmi/core'
 	import { config } from './wagmiConfig'
 	import { approveTokens, depositLP, withdrawLP } from './writeFunctions';
@@ -57,23 +58,25 @@
 		}
 	}
 
-	async function getStaked0(address: any) {
+	async function getUserinfo(pid: any, address: any) {
 		const result = await readContract(config, {
 			abi,
-			address: '0x656Bb0ded20F8DEF1053D43947E80a40880316A7',	//	tNUKE-tWPLS (0)
-			functionName: "allowance",
+			address: '0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9',	// masterchef
+			functionName: "userInfo",
 			args: [
-				address,    //  spender
-				"0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9",   // masterchef
+				pid, 	//	Pool ID
+				address,    //  Client address
 			]
 		})
-		allowance0 = result
+		console.log("staked", result)		//	DEBUG
+		staked0 = formatEther(result[0])
+		console.log("staked0", staked0)
 		return {
 			result
 		}
 	}
 
-	async function getEarned0(pid: any, address: any) {
+	async function getEarned(pid: any, address: any) {
 		const result = await readContract(config, {
 			abi,
 			address: '0x648bc4DDD5743Ef6681c84F43C86D2BdB48762F9',	// masterchef
@@ -83,7 +86,20 @@
 				address,    //  Client address
 			]
 		})
+		console.log(result)		//	DEBUG
 		earned0 = formatEther(result)
+		return {
+			result
+		}
+	}
+
+	async function getBalance0(address:any) {
+		const result = await getBalance(config, {
+			address: address,	// 	Account address
+			token: '0x656Bb0ded20F8DEF1053D43947E80a40880316A7',	//	tNUKE-tWPLS (0)
+		})
+		balance0 = formatEther(result.value)
+		console.log("tNUKE- tWPLS LP Balance:", balance0)	// DEBUG
 		return {
 			result
 		}
@@ -91,13 +107,15 @@
 	
     watchAccount(config, {
         onChange(accountData) {
+			console.log("account changed", accountData)
 			const acc = getAccount(config)
 			isConn = acc.isConnected
             chainid = accountData.chainId
 			account = acc
-			getAllowance0(acc.address)
-			getEarned0(0, acc.address)
-			console.log("earned", earned0)
+			getAllowance0(account.address)
+			getEarned(0, account.address)
+			getBalance0(account.address)
+			getUserinfo(0, account.address)
         }
     })
 
@@ -144,10 +162,22 @@
 		console.log(result)
 	}
 
-	onMount(async () => {
-		getEarned0(0, account.address)
-		getAllowance0(account.address)
-	})
+	async function getRewards0() {
+		const result = await depositLP(
+			0, //	Pool ID
+			0,	//	amount
+			943,	// chainid
+		)
+		console.log(result)
+	}
+
+	// onMount(async () => {
+	// 	const acc = getAccount(config)
+	// 	isConn = acc.isConnected
+	// 	account = acc
+	// 	getEarned(0, account.address)
+	// 	getAllowance0(account.address)
+	// })
 </script>
 <svelte:head>
 	<title>Farm / TACTICS</title>
@@ -375,9 +405,10 @@
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
                                         <p class="text-left ml-16">Stake <strong>tNUKE-tWPLS</strong> earn <strong>tCARE</strong></p>
                                             <div class="flex justify-end">
-                                                <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span>
+												<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked0} </span>
+                                                <!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
                                                 <span class="text-xs p-1" style="line-height: 2.2;"><strong>tCARE</strong> earned </span>
-                                                <Button variant="outline" class="p-2">{earned0}</Button>
+                                                <Button variant="outline" class="p-2" on:click={getRewards0}>{earned0}</Button>
 												<!-- WITHDRAW FIELD -->
 												<AlertDialog.Root>
 													<AlertDialog.Trigger>
@@ -388,9 +419,9 @@
 														<AlertDialog.Title>Withdraw tNUKE-tWPLS</AlertDialog.Title>
 													  </AlertDialog.Header>
 													  <div class="grid gap-4 py-4">
+														<Label for="amount" class="text-right hover:underline text-xs">Staked: {staked0}</Label>
 														<div class="grid grid-cols-4 items-center gap-4">
 														  <Label for="amount" class="text-right">Amount</Label>
-														  <Label for="amount" class="absolute right-0 mr-10 hover:underline">Max</Label>
 														  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
 														</div>
 													  </div>
@@ -410,9 +441,10 @@
 														<AlertDialog.Title>Deposit tNUKE-tWPLS</AlertDialog.Title>
 													  </AlertDialog.Header>
 													  <div class="grid gap-4 py-4">
+														<Label for="amount" class="text-right hover:underline text-xs">Balance: {balance0}</Label>
 														<div class="grid grid-cols-4 items-center gap-4">
 														  <Label for="amount" class="text-right">Amount</Label>
-														  <Label for="amount" class="absolute right-0 mr-10 hover:underline">Max</Label>
+														
 														  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
 														  
 														</div>

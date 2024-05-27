@@ -70,6 +70,31 @@ export const abi = [
 		stateMutability: "view",
 		type: "function"
 	},
+	{
+		inputs: [
+			{
+				name: "",
+				type: "uint256"
+			},
+			{
+				name: "",
+				type: "address"
+			}
+		],
+		name: "userInfo",
+		outputs: [
+			{
+				name: "amount",
+				type: "uint256"
+			},
+			{
+				name: "rewardDebt",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
   ] as const
 
   
