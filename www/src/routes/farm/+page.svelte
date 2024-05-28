@@ -6,6 +6,7 @@
 	import * as AlertDialog from "$lib/components/ui/alert-dialog";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Label } from "$lib/components/ui/label/index.js";
+	import { Badge } from "$lib/components/ui/badge";
 
 	import pls from "$lib/images/pls.png";	// IMAGES
 	import plsx from "$lib/images/plsx.png";
@@ -635,7 +636,7 @@
                                             
                                             
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-                                        <p class="text-left ml-16">Stake <strong>NUKE-PLSX</strong> earn <strong>CARE</strong></p>
+                                        <p class="text-left ml-16">Stake <strong>NUKE-PLSX</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">150x</Badge></p>
                                             <div class="flex justify-end">
 												<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked0} </span>
                                                 <!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
@@ -712,7 +713,7 @@
                                             
                                             
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-                                        <p class="text-left ml-16">Stake <strong>NUKE-INC</strong> earn <strong>CARE</strong></p>
+                                        <p class="text-left ml-16">Stake <strong>NUKE-INC</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">150x</Badge></p>
                                             <div class="flex justify-end">
 												<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked1} </span>
                                                 <!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
@@ -788,7 +789,7 @@
                                             
                                             
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-                                        <p class="text-left ml-16">Stake <strong>CARE-NUKE</strong> earn <strong>CARE</strong></p>
+                                        <p class="text-left ml-16">Stake <strong>CARE-NUKE</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">300x</Badge></p>
                                             <div class="flex justify-end">
 												<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked2} </span>
                                                 <!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
@@ -864,7 +865,7 @@
                                             
                                             
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-                                        <p class="text-left ml-16">Stake <strong>CARE-PLSX</strong> earn <strong>CARE</strong></p>
+                                        <p class="text-left ml-16">Stake <strong>CARE-PLSX</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">300x</Badge></p>
                                             <div class="flex justify-end">
 												<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked3} </span>
                                                 <!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
@@ -940,7 +941,7 @@
                                             
                                             
                                         <!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
-                                        <p class="text-left ml-16">Stake <strong>CARE-INC</strong> earn <strong>CARE</strong></p>
+                                        <p class="text-left ml-16">Stake <strong>CARE-INC</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">300x</Badge></p>
                                             <div class="flex justify-end">
 												<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked4} </span>
                                                 <!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
