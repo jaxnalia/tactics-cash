@@ -1099,7 +1099,7 @@
 						<div></div>
 						<a
 							style="font-size: 12px;"
-							href="https://bafybeicjuszlj6w3gg5mfszvo7z6ux4iaafhw62vfyfw27nm65bexodov4.ipfs.dweb.link/"
+							href="https://bafybeicjuszlj6w3gg5mfszvo7z6ux4iaafhw62vfyfw27nm65bexodov4.ipfs.dweb.link/#/address/0x693D0e3D1F2b6384ffe4FFDCa8AC74FE6b976b26?tab=contract"
 							target="_blank">View Contract
 						</a>
 							<ExternalLink size={10} />
@@ -1108,7 +1108,7 @@
 					<span style="text-decoration: underline;" class="flex flex pb-3">
 							<a
 							style="font-size: 12px;"
-							href="https://bafybeihiwe3inbfru7h6pesaj4siacbyx7t6o5qp3vwdz25n3p6ewlbnie.ipfs.dweb.link/#/add/V2/PLS/0x6Be2B5a38e04d42FB13d2D16a30Ad92988308125"
+							href="https://bafybeihiwe3inbfru7h6pesaj4siacbyx7t6o5qp3vwdz25n3p6ewlbnie.ipfs.dweb.link/#/add/V2/0x95B303987A60C71504D99Aa1b13B4DA07b0790ab/0x6Be2B5a38e04d42FB13d2D16a30Ad92988308125"
 							target="_blank">Add Liquidity
 						</a>
 							<ExternalLink size={10} />
