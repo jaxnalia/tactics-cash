@@ -13,6 +13,8 @@
 	import inc from "$lib/images/inc.png";
 	import nuke from "$lib/images/tactical-nuke.png";
 	import care from "$lib/images/Care_Package.webp"
+	import pdai from "$lib/images/pDAI.svg"
+	import plusd from "$lib/images/pLUSD.svg"
 
     import { Plus, Minus } from "lucide-svelte"; // ICONS
 	import { ExternalLink } from 'radix-icons-svelte';
@@ -63,6 +65,16 @@
 	let staked4: any = 0
 	let balance4: any = 0
 	let earned4: any = 0
+	// NUKE-pDAI
+	let allowance5: any = 0
+	let staked5: any = 0
+	let balance5: any = 0
+	let earned5: any = 0
+	// NUKE-pLUSD
+	let allowance6: any = 0
+	let staked6: any = 0
+	let balance6: any = 0
+	let earned6: any = 0
 
 	const accInit = getClient(config)
 	chainid = accInit.chain.id
@@ -491,6 +503,143 @@
 		balance4 = formatEther(result.value)
 	}
 
+	async function approveParsedTokens5() {
+		const result = await approveTokens(
+			'0x72ee4ade8b970a8570b03dc81f9ef486afb9501f',	//	nuke/pdai (5)
+			"0x693D0e3D1F2b6384ffe4FFDCa8AC74FE6b976b26", //	MasterChef Mainnet
+			parsedNumberOfTokens,	//	amount
+			369,	// chainid
+		)
+		console.log(result)
+	}
+	async function deposit5() {
+		const result = await depositLP(
+			5, //	Pool ID
+			parsedNumberOfTokens,	//	amount
+			369,	// chainid
+		)
+		console.log(result)
+	}
+	async function withdraw5() {
+		const result = await withdrawLP(
+			5, //	Pool ID
+			parsedNumberOfTokens,	//	amount
+			369,	// chainid
+		)
+		console.log(result)
+	}
+	async function getRewards5() {
+		const result = await depositLP(
+			5,	//Pool ID
+			0,	//amount
+			369,	//Chainid
+		)
+		console.log(result)
+	}
+	async function getAllowance5(spender: any) {
+		const result = await getAllowance(
+			'0x72ee4ade8b970a8570b03dc81f9ef486afb9501f',	//	nuke/pdai (5)
+			spender
+		)
+		allowance5 = Object.values(result)[0]
+	}
+	async function getstaked5(address: any) {
+		const result = await getUserinfo(
+			5, //	PID
+			address		// address
+		)
+		const res = Object.values(result)[0]		
+		staked5 = formatEther(res[0])
+	}
+	async function getEarned5(pid: any, address: any) {
+		const result = await readContract(config, {
+			abi,
+			address: '0x693D0e3D1F2b6384ffe4FFDCa8AC74FE6b976b26',	// masterchef-mainnet
+			functionName: "pendingTokens",
+			args: [
+				pid, 	//	Pool ID
+				address,    //  Client address
+			]
+		})
+		earned5 = formatEther(result)
+	}
+	async function getBalance5(address:any) {
+		const result = await getBalance(config, {
+			address: address,	// 	Account address
+			token: '0x72ee4ade8b970a8570b03dc81f9ef486afb9501f',	//	nuke/pdai (5)
+		})
+		balance5 = formatEther(result.value)
+	}
+
+
+	async function approveParsedTokens6() {
+		const result = await approveTokens(
+			'0xc54705106441f79ee1a750cbe832cf8f581941a2',	//	nuke/plusd (6)
+			"0x693D0e3D1F2b6384ffe4FFDCa8AC74FE6b976b26", //	MasterChef Mainnet
+			parsedNumberOfTokens,	//	amount
+			369,	// chainid
+		)
+		console.log(result)
+	}
+	async function deposit6() {
+		const result = await depositLP(
+			6, //	Pool ID
+			parsedNumberOfTokens,	//	amount
+			369,	// chainid
+		)
+		console.log(result)
+	}
+	async function withdraw6() {
+		const result = await withdrawLP(
+			6, //	Pool ID
+			parsedNumberOfTokens,	//	amount
+			369,	// chainid
+		)
+		console.log(result)
+	}
+	async function getRewards6() {
+		const result = await depositLP(
+			6,	//Pool ID
+			0,	//amount
+			369,	//Chainid
+		)
+		console.log(result)
+	}
+	async function getAllowance6(spender: any) {
+		const result = await getAllowance(
+			'0xc54705106441f79ee1a750cbe832cf8f581941a2',	//	nuke/plusd (6)
+			spender
+		)
+		allowance6 = Object.values(result)[0]
+	}
+	async function getstaked6(address: any) {
+		const result = await getUserinfo(
+			6, //	PID
+			address		// address
+		)
+		const res = Object.values(result)[0]		
+		staked6 = formatEther(res[0])
+	}
+	async function getEarned6(pid: any, address: any) {
+		const result = await readContract(config, {
+			abi,
+			address: '0x693D0e3D1F2b6384ffe4FFDCa8AC74FE6b976b26',	// masterchef-mainnet
+			functionName: "pendingTokens",
+			args: [
+				pid, 	//	Pool ID
+				address,    //  Client address
+			]
+		})
+		earned6 = formatEther(result)
+	}
+	async function getBalance6(address:any) {
+		const result = await getBalance(config, {
+			address: address,	// 	Account address
+			token: '0xc54705106441f79ee1a750cbe832cf8f581941a2',	//	nuke/plusd (6)
+		})
+		balance6 = formatEther(result.value)
+	}
+
 	watchAccount(config, {
         onChange(accountData) {
 			console.log("account changed", accountData)
@@ -527,6 +676,16 @@
 			getEarned4(4, account.address)
 			getBalance4(account.address)
 			getstaked4(account.address)
+
+			getAllowance5(account.address)
+			getEarned5(5, account.address)
+			getBalance5(account.address)
+			getstaked5(account.address)
+
+			getAllowance6(account.address)
+			getEarned6(6, account.address)
+			getBalance6(account.address)
+			getstaked6(account.address)
         }
     })
 </script>
@@ -545,13 +704,28 @@
 
 	</h1>
 	<div class="h-10 h-10" />
+	{#key chainid || isConn}
 	<Tabs.Root value="farm" class="w-96 sm:w-128 md:w-180 mb-10">
 		<div class="flex justify-end">
-			<Tabs.List class="grid w-full grid-cols-2 sm:max-w-xs">
+			
+			{#if chainid == 369}
+			<Tabs.List class="grid w-full grid-cols-3 sm:max-w-xs">
 				<Tabs.Trigger value="farm">Liquidity Farm</Tabs.Trigger>
+				
+					
+					<Tabs.Trigger value="pfarm">pFarm</Tabs.Trigger>
+					
+				
 				<Tabs.Trigger value="ss">Single Staking</Tabs.Trigger>
 				
 			</Tabs.List>
+			{:else}
+			<Tabs.List class="grid w-full grid-cols-2 sm:max-w-xs">
+				<Tabs.Trigger value="farm">Liquidity Farm</Tabs.Trigger>
+				<Tabs.Trigger value="ss">Single Staking</Tabs.Trigger>
+			</Tabs.List>
+			{/if}
+			
 		</div>
 		
 		<Tabs.Content value="ss">
@@ -569,18 +743,201 @@
 				
 
 				<Card.Footer class="space-x-3 flex justify-center p-4">
-					<!-- <ApproveTokens />
-					<ClaimRewards /> -->
+
 
 					
 				</Card.Footer>
 			</Card.Root>
 		</Tabs.Content>
+
+		{#if chainid == 369}
+		<Tabs.Content value="pfarm">
+			<Card.Root class="backdrop-blur w-96 sm:w-128 md:w-180">
+				<Card.Header class="p-5">
+					<h1 class="text-3xl font-bold">Forked PRC20 Farm</h1>
+					<Card.Title>Stake PulseX V2 liquidity & earn <span class="font-bold">Care Package</span></Card.Title>
+					<div style="margin-top: -2.375rem;" class="hidden sm:flex justify-end">
+
+						<Tooltip.Root>
+							
+								<Tooltip.Trigger>
+									<span class="font-semibold" style=""><span class="font-bold">CARE</span> per block: 10</span>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									86400 CARE per day
+								</Tooltip.Content>
+							
+						</Tooltip.Root>
+					</div>
+				</Card.Header>
+				<Card.Content>
+				
+					<div class="flex justify-between mb-2">
+						<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+
+							<div style="transform: translate(0, 8px)">
+								
+								<img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
+								<img style="position: absolute; transform: translate(0px, 0px);" src={pdai} alt="PDAI" width="20">
+							</div>
+								
+								
+							<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+							<p class="text-left ml-16">Stake <strong>NUKE-pDAI</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">75x</Badge></p>
+								<div class="flex justify-end">
+									<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked5} </span>
+									<!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
+									<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+									<Button variant="outline" class="p-2" on:click={getRewards5}>{earned5}</Button>
+									<!-- WITHDRAW FIELD -->
+									<AlertDialog.Root>
+										<AlertDialog.Trigger>
+											<Button class="p-1 ml-1"><Minus /></Button>
+										</AlertDialog.Trigger>
+										<AlertDialog.Content class="sm:max-w-[425px]">
+										  <AlertDialog.Header>
+											<AlertDialog.Title>Withdraw NUKE-pDAI</AlertDialog.Title>
+										  </AlertDialog.Header>
+										  <div class="grid gap-4 py-4">
+											<Label for="amount" class="text-right hover:underline text-xs">Staked: {staked5}</Label>
+											<div class="grid grid-cols-4 items-center gap-4">
+											  <Label for="amount" class="text-right">Amount</Label>
+											  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
+											</div>
+										  </div>
+										  <AlertDialog.Footer>
+											<AlertDialog.Action on:click={withdraw5}>Confirm</AlertDialog.Action>
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+										  </AlertDialog.Footer>
+										</AlertDialog.Content>
+									  </AlertDialog.Root>
+									<!-- DEPOSIT FIELD -->
+									<AlertDialog.Root>
+										<AlertDialog.Trigger>
+											<Button class="p-1 ml-1"><Plus /></Button>
+										</AlertDialog.Trigger>
+										<AlertDialog.Content class="sm:max-w-[425px]">
+										  <AlertDialog.Header>
+											<AlertDialog.Title>Deposit NUKE-pDAI</AlertDialog.Title>
+										  </AlertDialog.Header>
+										  <div class="grid gap-4 py-4">
+											<Label for="amount" class="text-right hover:underline text-xs">Balance: {balance5}</Label>
+											<div class="grid grid-cols-4 items-center gap-4">
+											  <Label for="amount" class="text-right">Amount</Label>
+											
+											  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
+											  
+											</div>
+										  </div>
+										<AlertDialog.Footer>
+											{#key parsedNumberOfTokens}
+												{#if parsedNumberOfTokens > allowance5}
+													<Button on:click={approveParsedTokens5}>Approve</Button>
+												{:else}
+													<AlertDialog.Action on:click={deposit5}>Confirm</AlertDialog.Action>
+												{/if}
+											{/key}
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+										</AlertDialog.Footer>
+										</AlertDialog.Content>
+									  </AlertDialog.Root>
+								</div>
+						</div>
+					</div>
+
+
+					<!-- END OF BLOCK 6 -->
+
+					<div class="flex justify-between mb-2">
+						<div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
+
+							<div style="transform: translate(0, 8px)">
+								
+								<img style="position: absolute; transform: translate(0px, 0px);" src={nuke} alt="NUKE" width="48">
+								<img style="position: absolute; transform: translate(0px, 0px);" src={plusd} alt="PLUSD" width="20">
+							</div>
+								
+								
+							<!-- <span class="absolute sm:hidden" style="left:0; transform: translate(72px, 0px); color: #beee11;"><strong class="text-md">0.00</strong>%</span> -->
+							<p class="text-left ml-16">Stake <strong>NUKE-pLUSD</strong> earn <strong>CARE</strong><Badge class="rounded-full ml-2 p-1 font-bold" variant="default">75x</Badge></p>
+								<div class="flex justify-end">
+									<span class="text-xs p-1" style="line-height: 2.2;"><strong>Staked</strong> {staked6} </span>
+									<!-- <span class="text-xs p-1 mr-2" style="line-height: 2.2;">APR <span style="color: #beee11;"><strong class="text-lg">0.00</strong>%</span></span> -->
+									<span class="text-xs p-1" style="line-height: 2.2;"><strong>CARE</strong> earned </span>
+									<Button variant="outline" class="p-2" on:click={getRewards6}>{earned6}</Button>
+									<!-- WITHDRAW FIELD -->
+									<AlertDialog.Root>
+										<AlertDialog.Trigger>
+											<Button class="p-1 ml-1"><Minus /></Button>
+										</AlertDialog.Trigger>
+										<AlertDialog.Content class="sm:max-w-[425px]">
+										  <AlertDialog.Header>
+											<AlertDialog.Title>Withdraw NUKE-pLUSD</AlertDialog.Title>
+										  </AlertDialog.Header>
+										  <div class="grid gap-4 py-4">
+											<Label for="amount" class="text-right hover:underline text-xs">Staked: {staked6}</Label>
+											<div class="grid grid-cols-4 items-center gap-4">
+											  <Label for="amount" class="text-right">Amount</Label>
+											  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
+											</div>
+										  </div>
+										  <AlertDialog.Footer>
+											<AlertDialog.Action on:click={withdraw6}>Confirm</AlertDialog.Action>
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+										  </AlertDialog.Footer>
+										</AlertDialog.Content>
+									  </AlertDialog.Root>
+									<!-- DEPOSIT FIELD -->
+									<AlertDialog.Root>
+										<AlertDialog.Trigger>
+											<Button class="p-1 ml-1"><Plus /></Button>
+										</AlertDialog.Trigger>
+										<AlertDialog.Content class="sm:max-w-[425px]">
+										  <AlertDialog.Header>
+											<AlertDialog.Title>Deposit NUKE-pLUSD</AlertDialog.Title>
+										  </AlertDialog.Header>
+										  <div class="grid gap-4 py-4">
+											<Label for="amount" class="text-right hover:underline text-xs">Balance: {balance6}</Label>
+											<div class="grid grid-cols-4 items-center gap-4">
+											  <Label for="amount" class="text-right">Amount</Label>
+											
+											  <Input id="amount" placeholder="0" class="col-span-3" on:input={handleInputChange} bind:value={numberOfTokens} />
+											  
+											</div>
+										  </div>
+										<AlertDialog.Footer>
+											{#key parsedNumberOfTokens}
+												{#if parsedNumberOfTokens > allowance6}
+													<Button on:click={approveParsedTokens6}>Approve</Button>
+												{:else}
+													<AlertDialog.Action on:click={deposit6}>Confirm</AlertDialog.Action>
+												{/if}
+											{/key}
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+										</AlertDialog.Footer>
+										</AlertDialog.Content>
+									  </AlertDialog.Root>
+								</div>
+						</div>
+					</div>
+
+					<!-- END OF BLOCK 7 -->
+
+				</Card.Content>
+				
+				
+
+				<Card.Footer class="space-x-3 flex justify-center p-4">
+
+
+					
+				</Card.Footer>
+			</Card.Root>
+		</Tabs.Content>
+		{/if}
+
 		<Tabs.Content value="farm"> 
 			<Card.Root class="backdrop-blur w-96 sm:w-128 md:w-180">
-
-				{#key chainid || isConn}
-
 					<Card.Header class="p-5">
 						<h1 class="text-3xl font-bold">Liquidity Farm</h1>
 						{#if chainid == 943}
@@ -623,7 +980,7 @@
 					
 						{#if isConn || accInit.chain.id >= 1}	
                             {#if chainid == 369}
-                                <p>Connected to PulseChain Mainnet farm.</p>
+
 
                                 <div class="flex justify-between mb-2">
                                     <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
@@ -1005,8 +1362,10 @@
 
 
 								<!-- END OF BLOCK 5 -->
+
+								
                             {:else if chainid == 943}
-                                <p>Connected to PulseChain Testnet farm.</p>
+                                
 
 								<div class="flex justify-between mb-2">
                                     <div class="relative bg-gradient-to-t from-white/5 to-white/15 rounded-sm py-3 px-2 w-full text-right px-3">
@@ -1094,7 +1453,7 @@
                         {/if}	
                     
 					</Card.Content>
-				{/key}
+				
 				<div style="justify-content: space-around;" class="px-6 py-2 flex flex-row">
 					<span style="text-decoration: underline;" class="flex flex pb-3">
 						<div></div>
@@ -1133,7 +1492,7 @@
 			</Card.Root>
 		</Tabs.Content>
 	</Tabs.Root>
-	
+	{/key}
 	<!-- <div style="justify-content: center;" class="flex"> -->
 		<!-- <Button
 			target="_blank"
